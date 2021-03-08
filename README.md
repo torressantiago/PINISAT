@@ -16,8 +16,8 @@ Le sous-système mécanique(Mechanical Subsystem) fait référence à la structu
 <div style="text-align:center"><img src="Images/DiagrammeEnBlocsPINISAT.png" /></div>
 
 ## Bibliographie
-|               |               |       |
-| ------------- |:-------------:| -----:|
+|               |               | 
+| ------------- |:-------------:| 
 |[1]| O. a. D. D. Quiros-Jimenez, «Development of a flight software framework for student CubeSat missions,» Revista Tecnología en Marcha, 12 2019.|
 |[2]| E. D. Kaplan et C. Hegarty, Understanding GPS/GNSS: Principles and Applications: GNSS Technology and Applications Series, Third Edition éd., Artech House Publishers, 2017.|
 |[3]| Garmin, «What is WAAS?,» 2021. [En ligne]. Available: https://www8.garmin.com/aboutGPS/waas.html.|
