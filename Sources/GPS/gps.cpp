@@ -10,8 +10,8 @@
  * Listens to GPS using SPI via Ublox class and shows data as a standard output
  */ 
 
-#include "/home/pi/PINISAT/lib/Common/Ublox.h"
-#include "/home/pi/PINISAT/lib/Common/Util.h"
+#include <Common/Ublox.h>
+#include <Common/Util.h>
 
 using namespace std;
 
