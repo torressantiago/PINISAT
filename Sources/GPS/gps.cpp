@@ -39,9 +39,9 @@ bool testGPSConnection(Ublox gps){
  * \param[in] gps The gps ublox object
  * \param[in] rate The data rate in ... [missing unit]
  */
-bool setNewGPSRate(gps, int rate){
+bool setNewGPSRate(Ublox gps, int rate){
     // ConfigureSolutionRate() allows the user to set a fixed data capture rate
-    if (!gps.configureSolutionRate(rate)){
+    if (gps.configureSolutionRate(rate)){
         return 0;
     }else{
         printf("Error setting new rate\n");
@@ -71,10 +71,18 @@ int main(int argc, char *argv[]){
                 // is the byte we want to read from the module and the second the place in which said byte stream is 
                 // going to be stored. Here we'll read the NAV_POSLLH bytes which gives us the position of the GPS module
                 // by returning the lagitude and longitude values.
+
+                // Each time a message was decoded, print "message was captured"
                 if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data) == 1){
-                    printf("message captured/n");
-                }else{
-                    printf("message was not sent\n");
+                    printf("message captured\n");
+                    /*The data decoded*/
+                    // GPS Millisecond Time of Week: (pos_data[0]/1000) s
+                    // Longitude: pos_data[1]/10000000
+                    // Latitude: pos_data[2]/10000000\n
+                    // Height above Ellipsoid: (pos_data[3]/1000) m
+                    // Height above mean sea level: (pos_data[4]/1000) m
+                    // Horizontal Accuracy Estateimate: (pos_data[5]/1000)) m
+                    // Vertical Accuracy Estateimate: (pos_data[6]/1000) m
                 }
                 // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
             }
