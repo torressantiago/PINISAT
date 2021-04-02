@@ -11,6 +11,12 @@
 #ifndef GPIO_H
 #define GPIO_H
 
+#define SERVER_IPADDR "192.168.0.10"
+#define PORT 7000
+#define MAXLINE 1024 // 10 bit buffer
+
+
+
 /*
 ----Steps for a UDP server----
     1. Create UDP socket.
@@ -60,7 +66,8 @@ v. Close file descriptor
     -> fd: File descriptor
 */
 
-
+/*Do it all server socket function*/
+void udpserv(String servipaddr, int port);
 
 
 #endif
