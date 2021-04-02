@@ -61,15 +61,13 @@ int main(int argc, char *argv[]) {
     sensor->initialize();
 
     float tableauaccel[3];
-    float tabbleaumag[3];
+    float tableaumag[3];
     float tableaugyr[3];
 
     while(1){
         sensor->update();
-        read(&tableauaccel, &tabeleaumag, &tableaugyr, &sensor);
+        sensor->read(&tableauaccel, &tableaumag, &tableaugyr, &sensor);
 
         usleep(500000);
     }
 }
-
-    
