@@ -18,6 +18,16 @@
 #include <string>
 #include <memory>
 
+
+/**
+ * \brief This function creates the Sensor object chosen (LSM)
+ * \param[out] ptr the pointer to the created object
+ */
+std::unique_ptr <InertialSensor> get_inertial_sensor() {
+    auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
+    return ptr;  
+}
+
 /**
  * \brief This function allows you to read the values of 
  * the accelerometer, the gyroscope and the magnetometer 
@@ -27,20 +37,20 @@
  * \param[in] tabmag tab of floats with the values of the magnetometer in the 3 directions
  */
 
-void read(float *tabaccel, float *tabgyr, float *tabmag, InertialSensor *obj){
-  obj->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
-  obj->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
-  obj->read_magnetometer(tabmag,tabmag+1,tabmag+2);
-}
+void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
+    auto sensor = get_inertial_sensor();
+    sensor->initialize();
+//-------------------------------------------------------------------------
 
-/**
- * \brief This function creates the Sensor object chosen (LSM)
- * \param[out] ptr the pointer to the created object
- */
-std::unique_ptr <InertialSensor> get_inertial_sensor() {
-    printf("Selected: LSM9DS1\n");
-    auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
-    return ptr;  
+    while(1) {
+        sensor->update();
+        sensor->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
+        sensor->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
+        sensor->read_magnetometer(tabmag,tabmag+1,tabmag+2);
+
+       usleep(50);
+       printf("%f", *tabaccel);
+    }
 }
 
 //======================================================================================================
@@ -52,6 +62,7 @@ int main(int argc, char *argv[]) {
     }
 
     auto sensor = get_inertial_sensor();
+    auto *sensor_ptr = &sensor;
 
     if (!sensor->probe()) {
         printf("Sensor not enabled\n");
@@ -63,11 +74,5 @@ int main(int argc, char *argv[]) {
     float tableauaccel[3];
     float tableaumag[3];
     float tableaugyr[3];
-
-    while(1){
-        sensor->update();
-        read(&tableauaccel, &tableaumag, &tableaugyr, sensor);
-
-        usleep(500000);
-    }
+    read_fromsens(tableauaccel, tableaumag, tableaugyr);
 }

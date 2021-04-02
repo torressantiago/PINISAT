@@ -12,11 +12,11 @@ public:
     void read_gyroscope(float *gx, float *gy, float *gz) {*gx = _gx; *gy = _gy; *gz = _gz;};
     void read_magnetometer(float *mx, float *my, float *mz) {*mx = _mx; *my = _my; *mz = _mz;};
     /*
-    void read(float &tabaccel, float &tabgyr, float &tabmag){
+    void readfromsens(float *tabaccel, float *tabgyr, float *tabmag){
         read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
         read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
         read_magnetometer(tabmag,tabmag+1,tabmag+2);
-    };   */
+    };*/   
 
 protected:
     float temperature;
