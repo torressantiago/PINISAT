@@ -12,6 +12,7 @@
 
 #include <Common/Ublox.h>
 #include <Common/Util.h>
+#include <Common/sockets.h>
 
 using namespace std;
 
@@ -85,11 +86,12 @@ int main(int argc, char *argv[]){
                     // Vertical Accuracy Estateimate: (pos_data[6]/1000) m
                 }
                 // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
+
+                // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
+                // amount of time. 
+                usleep(500);
             }
         }
-        // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
-        // amount of time. 
-        usleep(500);
     }
         
 
