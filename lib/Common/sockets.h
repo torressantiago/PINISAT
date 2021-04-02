@@ -67,7 +67,7 @@ v. Close file descriptor
 */
 
 /*Do it all server socket function*/
-void udpserv(String servipaddr, int port);
-
+void udpserv();
+// string servipaddr, int port
 
 #endif
