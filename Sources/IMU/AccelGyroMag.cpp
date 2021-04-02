@@ -22,7 +22,6 @@
  * \brief This function allows you to choose which of the two sensors : 
  * MPU or LSM you wish to use and creates the object sensor
  * \param[out] ptr the pointer to the chosen measurement unit
- * \param[in] sensor_name the name of the sensor you choose  
  */
 std::unique_ptr <InertialSensor> get_inertial_sensor() {
     printf("Selected: LSM9DS1\n");
@@ -53,31 +52,22 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    auto sensor_name = get_sensor_name(argc, argv);
-    if (sensor_name.empty())
-        return EXIT_FAILURE;
-
-    auto sensor = get_inertial_sensor(sensor_name);
-
-    if (!sensor) {
-        printf("Wrong sensor name. Select: mpu or lsm\n");
-        return EXIT_FAILURE;
-    }
+    auto sensor = get_inertial_sensor();
 
     if (!sensor->probe()) {
         printf("Sensor not enabled\n");
         return EXIT_FAILURE;
     }
+
     sensor->initialize();
 
     float tableauaccel[3];
     float tabbleaumag[3];
     float tableaugyr[3];
-    auto sensor = getSensor(sensor_name);
 
     while(1){
         sensor->update();
-        sensor->read(&tableauaccel, &tabelaumag, &tableaugyr, &sensor);
+        sensor->read(&tableauaccel, &tabeleaumag, &tableaugyr, &sensor);
 
         usleep(500000);
     }
