@@ -19,7 +19,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-void udpserv(string servipaddr, int port){
+void udpserv(){
     int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello from server";
