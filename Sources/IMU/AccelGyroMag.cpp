@@ -1,4 +1,3 @@
-@ -0,0 +1,43 @@
 /** @file AccelGyroMag.cpp
  * 
  * @brief
@@ -21,57 +20,16 @@
 
 /**
  * \brief This function allows you to choose which of the two sensors : 
- * MPU or LSM you wish to use
+ * MPU or LSM you wish to use and creates the object sensor
  * \param[out] ptr the pointer to the chosen measurement unit
  * \param[in] sensor_name the name of the sensor you choose  
  */
-std::unique_ptr <InertialSensor> get_inertial_sensor( std::string sensor_name)
-{
-    if (sensor_name == "mpu") {
-        printf("Selected: MPU9250\n");
-        auto ptr = std::unique_ptr <InertialSensor>{ new MPU9250() };
-        return ptr;
-    }
-    else if (sensor_name == "lsm") {
-        printf("Selected: LSM9DS1\n");
-        auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
-        return ptr;
-    }
-    else {
-        return NULL;
-    }
+std::unique_ptr <InertialSensor> get_inertial_sensor() {
+    printf("Selected: LSM9DS1\n");
+    auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
+    return ptr;  
 }
 
-/**
- * \brief This function creates the object Sensor 
- */
-std::string get_sensor_name(int argc, char *argv[])
-{
-    if (get_navio_version() == NAVIO2) {
-
-        if (argc < 2) {
-            printf("Enter parameter\n");
-            return std::string();
-        }
-
-        // prevent the error message
-        opterr = 0;
-        int parameter;
-
-        while ((parameter = getopt(argc, argv, "i:h")) != -1) {
-            switch (parameter) {
-            case 'i': return optarg;
-            case 'h': print_help(); return "-1";
-            case '?': printf("Wrong parameter.\n");
-                      print_help();
-                      return std::string();
-            }
-        }
-
-    } else { //sensor on NAVIO+
-
-        return "mpu";
-    }
 
 /**
  * \brief This function allows you to read the values of the accelerometer,
@@ -81,7 +39,7 @@ std::string get_sensor_name(int argc, char *argv[])
  * \param[in] tabgyr tab of floats with the values of the gyrometer in the 3 directions
  * \param[in] tabmag tab of floats with the values of the magnetometer in the 3 directions
  */
-void read(float &tabaccel, float &tabgyr, float &tabmag, auto &obj){
+void read(float &tabaccel, float &tabgyr, float &tabmag, float &obj){
   obj->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
   obj->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
   obj->read_magnetometer(tabmag,tabmag+1,tabmag+2);
