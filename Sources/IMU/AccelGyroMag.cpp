@@ -19,9 +19,8 @@
 #include <memory>
 
 /**
- * \brief This function allows you to choose which of the two sensors : 
- * MPU or LSM you wish to use and creates the object sensor
- * \param[out] ptr the pointer to the chosen measurement unit
+ * \brief This function creates the Sensor object chosen (LSM)
+ * \param[out] ptr the pointer to the created object
  */
 std::unique_ptr <InertialSensor> get_inertial_sensor() {
     printf("Selected: LSM9DS1\n");
@@ -31,8 +30,8 @@ std::unique_ptr <InertialSensor> get_inertial_sensor() {
 
 
 /**
- * \brief This function allows you to read the values of the accelerometer,
- * the gyroscope and the magnetometer 
+ * \brief This function allows you to read the values of 
+ * the accelerometer, the gyroscope and the magnetometer 
  * \param[out] obj the pointer to the tabs 
  * \param[in] tabaccel tab of floats with the values of the acceleromter in the 3 directions
  * \param[in] tabgyr tab of floats with the values of the gyrometer in the 3 directions
