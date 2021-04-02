@@ -19,17 +19,6 @@
 #include <memory>
 
 /**
- * \brief This function creates the Sensor object chosen (LSM)
- * \param[out] ptr the pointer to the created object
- */
-std::unique_ptr <InertialSensor> get_inertial_sensor() {
-    printf("Selected: LSM9DS1\n");
-    auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
-    return ptr;  
-}
-
-
-/**
  * \brief This function allows you to read the values of 
  * the accelerometer, the gyroscope and the magnetometer 
  * \param[out] obj the pointer to the tabs 
@@ -37,10 +26,21 @@ std::unique_ptr <InertialSensor> get_inertial_sensor() {
  * \param[in] tabgyr tab of floats with the values of the gyrometer in the 3 directions
  * \param[in] tabmag tab of floats with the values of the magnetometer in the 3 directions
  */
-void read(float &tabaccel, float &tabgyr, float &tabmag, float &obj){
+
+void read(float *tabaccel, float *tabgyr, float *tabmag, InertialSensor *obj){
   obj->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
   obj->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
   obj->read_magnetometer(tabmag,tabmag+1,tabmag+2);
+}
+
+/**
+ * \brief This function creates the Sensor object chosen (LSM)
+ * \param[out] ptr the pointer to the created object
+ */
+std::unique_ptr <InertialSensor> get_inertial_sensor() {
+    printf("Selected: LSM9DS1\n");
+    auto ptr = std::unique_ptr <InertialSensor>{ new LSM9DS1() };
+    return ptr;  
 }
 
 //======================================================================================================
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
     while(1){
         sensor->update();
-        read(&tableauaccel, &tableaumag, &tableaugyr, &sensor);
+        read(&tableauaccel, &tableaumag, &tableaugyr, sensor);
 
         usleep(500000);
     }
