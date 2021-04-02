@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
     while(1){
         sensor->update();
-        sensor->read(&tableauaccel, &tableaumag, &tableaugyr, &sensor);
+        read(&tableauaccel, &tableaumag, &tableaugyr, &sensor);
 
         usleep(500000);
     }
