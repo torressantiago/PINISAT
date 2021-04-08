@@ -33,7 +33,7 @@ int create(){
     return sockfd;
 }
 
-int send_float(int sock, float msg, int port, char* addr){
+void send_float(int sock, float msg, int port, char* addr){
     char buffer[MAXLINE];
     char message[MAXLINE];
     sprintf(&message[0],"%f",msg);
