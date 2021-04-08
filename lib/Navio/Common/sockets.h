@@ -1,15 +1,15 @@
 /** @file gps.h
  * 
  * @brief Socket library for easy unicity between codes.
- * As per our needs, only a UDP socket server will be developed. 
+ * As per our needs, only a UDP socket client will be developed. 
  *
  * @author Santiago Torres Borda       
  * 
  * @version 1.0
  *
  */ 
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef SOCKETS_H
+#define SOCKETS_H
 
 #define SERVER_IPADDR "192.168.0.10"
 #define PORT 7000
@@ -18,6 +18,7 @@
 
 
 /*
+-> Source : https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 ----Steps for a UDP server----
     1. Create UDP socket.
     2. Bind the socket to server address.
@@ -67,7 +68,8 @@ v. Close file descriptor
 */
 
 /*Do it all server socket function*/
-void udpserv();
+int create();
 // string servipaddr, int port
+int send_float(int sock, float msg, int port, char* addr);
 
 #endif
