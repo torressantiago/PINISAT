@@ -70,6 +70,6 @@ v. Close file descriptor
 /*Do it all server socket function*/
 int create();
 // string servipaddr, int port
-int send_float(int sock, float msg, int port, char* addr);
+void send_float(int sock, float msg, int port, char* addr);
 
 #endif
