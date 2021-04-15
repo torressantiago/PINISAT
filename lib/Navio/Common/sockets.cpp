@@ -23,11 +23,9 @@
 
 int create(){
     int sockfd;
-        char buffer[MAXLINE];
-
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
-            perror("socket creation failed");
+            printf("socket creation failed\n");
             exit(EXIT_FAILURE);
     }
     return sockfd;
