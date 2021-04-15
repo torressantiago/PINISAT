@@ -40,7 +40,9 @@ void send_float(int sock, float msg, int port, char* addr){
 
 int main(){
     float message = 100.0;
+
     int socket = create();
     send_float(socket, message, 8080, "192.168.0.1");
     close(socket);
+    
 }
