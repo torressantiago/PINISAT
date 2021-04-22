@@ -12,13 +12,12 @@
 
 #include "Common/MPU9250.h"
 #include "Navio2/LSM9DS1.h"
-#include "Common/sockets.h"
 #include <unistd.h>
 #include <string>
 #include <memory>
 #include <Common/Ublox.h>
 #include <Common/Util.h>
-#include <Common/sockets.h>
+#include "Common/sockets.h"
 
 /**
  * \brief Test the sensor is connected and can communicate with the CPU

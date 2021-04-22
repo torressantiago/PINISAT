@@ -9,4 +9,5 @@ all:
 	rm -rf *.o
 
 clean:
-	rm -rf *.o ../../bin/sat
+	rm -rf *.o ../../lib/Navio/Common
+	rm -rf sat ../../bin/sat
