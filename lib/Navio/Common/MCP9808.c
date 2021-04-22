@@ -66,4 +66,5 @@ float returntemp(int file){
 		}
 		float cTemp = temp * 0.0625;
         return cTemp;
+	}
 }

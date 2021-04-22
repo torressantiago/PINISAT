@@ -9,5 +9,5 @@ all:
 	rm -rf *.o
 
 clean:
-	rm -rf ../../lib/Navio/Common/*.o
+	$(MAKE) -C ../../lib/Navio clean
 	rm -rf ../../bin/sat
