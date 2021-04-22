@@ -1,3 +1,7 @@
+#ifndef SOCKETS_H
+#include"sockets.h"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <linux/i2c-dev.h>

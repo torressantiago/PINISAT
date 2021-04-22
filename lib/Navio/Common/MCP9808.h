@@ -12,6 +12,6 @@ int create_i2c(int addr);
  * \param[out] cTemp returns the temperature in celsius degrees
  * \param[in] file the file descriptor is given as an input.
  */
-float returntemp(int file)
+float returntemp(int file);
 
 #endif
