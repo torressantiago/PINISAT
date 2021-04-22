@@ -31,10 +31,10 @@ int create(){
     return sockfd;
 }
 
-void send_float(int sock, float msg, int port, char* addr){
+void send_float(int sock, float msg, char Data, int port, char* addr){
     char buffer[MAXLINE];
     char message[MAXLINE];
-    sprintf(&message[0],"%f",msg);
+    sprintf(&message[0],"%c%f",Data,msg);
     struct sockaddr_in       servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
 
@@ -45,5 +45,5 @@ void send_float(int sock, float msg, int port, char* addr){
     unsigned int n, len;
 
     sendto(sock, (const char *)message, strlen(message),MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
-    printf("Hello message sent.\n");
+    //printf("Hello message sent.\n");
 }
