@@ -18,6 +18,7 @@
 #include <Common/Ublox.h>
 #include <Common/Util.h>
 #include "Common/sockets.h"
+#include "Common/MCP9808.h"
 
 /**
  * \brief Test the sensor is connected and can communicate with the CPU
@@ -74,6 +75,7 @@ std::unique_ptr <InertialSensor> get_inertial_sensor() {
 void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
     /*Create socket*/
     int socket = create();
+    int fileT = create_i2c(0x18);
     // We create a dynamic vector to save our position data.
     std::vector<double> pos_data;
 
@@ -95,56 +97,56 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
         }
 //-------------------------------------------------------------------------
 
-    while(gpstest == 0) {
-        sensor->update();
-        sensor->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
-        sensor->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
-        sensor->read_magnetometer(tabmag,tabmag+1,tabmag+2);
+        while(gpstest == 0) {
+            sensor->update();
+            sensor->read_accelerometer(tabaccel,tabaccel+1,tabaccel+2);
+            sensor->read_gyroscope(tabgyr,tabgyr+1,tabgyr+2);
+            sensor->read_magnetometer(tabmag,tabmag+1,tabmag+2);
 
-        /*Send IMU info via socket*/
-        send_float(socket, *(tabaccel), 8080, "192.168.0.1");
-        send_float(socket, *(tabaccel+1), 8080, "192.168.0.1");
-        send_float(socket, *(tabaccel+2), 8080, "192.168.0.1");
-        send_float(socket, *(tabgyr), 8080, "192.168.0.1");
-        send_float(socket, *(tabgyr+1), 8080, "192.168.0.1");
-        send_float(socket, *(tabgyr+2), 8080, "192.168.0.1");
-        send_float(socket, *(tabmag), 8080, "192.168.0.1");
-        send_float(socket, *(tabmag+1), 8080, "192.168.0.1");
-        send_float(socket, *(tabmag+2), 8080, "192.168.0.1");
+            /*Send IMU info via socket*/
+            send_float(socket, *(tabaccel), 8080, "192.168.0.1");
+            send_float(socket, *(tabaccel+1), 8080, "192.168.0.1");
+            send_float(socket, *(tabaccel+2), 8080, "192.168.0.1");
+            send_float(socket, *(tabgyr), 8080, "192.168.0.1");
+            send_float(socket, *(tabgyr+1), 8080, "192.168.0.1");
+            send_float(socket, *(tabgyr+2), 8080, "192.168.0.1");
+            send_float(socket, *(tabmag), 8080, "192.168.0.1");
+            send_float(socket, *(tabmag+1), 8080, "192.168.0.1");
+            send_float(socket, *(tabmag+2), 8080, "192.168.0.1");
 
-        // Here we use decodeSingleMessage(message_t msg, std::vector<double>& position_data). This is the 
-        // function that will trigger the SPI communication incomming from the GPS module. The first argument
-        // is the byte we want to read from the module and the second the place in which said byte stream is 
-        // going to be stored. Here we'll read the NAV_POSLLH bytes which gives us the position of the GPS module
-        // by returning the lagitude and longitude values.
+            // Here we use decodeSingleMessage(message_t msg, std::vector<double>& position_data). This is the 
+            // function that will trigger the SPI communication incomming from the GPS module. The first argument
+            // is the byte we want to read from the module and the second the place in which said byte stream is 
+            // going to be stored. Here we'll read the NAV_POSLLH bytes which gives us the position of the GPS module
+            // by returning the lagitude and longitude values.
 
-        // Each time a message was decoded, print "message was captured"
-        if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data) == 1){
-            //printf("message captured\n");
-            /*Send GPS info via socket*/
-            send_float(socket, (float)pos_data[0], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[1], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[2], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[3], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[4], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[5], 8080, "192.168.0.1");
-            send_float(socket, (float)pos_data[6], 8080, "192.168.0.1");
-            /*The data decoded*/
-            // GPS Millisecond Time of Week: (pos_data[0]/1000) s
-            // Longitude: pos_data[1]/10000000
-            // Latitude: pos_data[2]/10000000\n
-            // Height above Ellipsoid: (pos_data[3]/1000) m
-            // Height above mean sea level: (pos_data[4]/1000) m
-            // Horizontal Accuracy Estateimate: (pos_data[5]/1000)) m
-            // Vertical Accuracy Estateimate: (pos_data[6]/1000) m
+            // Each time a message was decoded, print "message was captured"
+            if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data) == 1){
+                //printf("message captured\n");
+                /*Send GPS info via socket*/
+                send_float(socket, (float)pos_data[0], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[1], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[2], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[3], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[4], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[5], 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[6], 8080, "192.168.0.1");
+                /*The data decoded*/
+                // GPS Millisecond Time of Week: (pos_data[0]/1000) s
+                // Longitude: pos_data[1]/10000000
+                // Latitude: pos_data[2]/10000000\n
+                // Height above Ellipsoid: (pos_data[3]/1000) m
+                // Height above mean sea level: (pos_data[4]/1000) m
+                // Horizontal Accuracy Estateimate: (pos_data[5]/1000)) m
+                // Vertical Accuracy Estateimate: (pos_data[6]/1000) m
+            }
+            // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
+            // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
+            // amount of time. 
+            send_float(socket, returntemp(fileT), 8080, "192.168.0.1");
+            usleep(500);
+            //printf("%f", *tabaccel);
         }
-        // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
-        }
-        // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
-        // amount of time. 
-
-        usleep(500);
-        //printf("%f", *tabaccel);
     }
 }
 
