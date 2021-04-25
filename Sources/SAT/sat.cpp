@@ -24,6 +24,9 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
+#define ADDRESS "192.168.4.1"
+#define PORT 8080
+
 /**
  * \brief Create I2C bus and configure slave with given address
  * \param[out] file returns file descriptor return from reading /dev/i2c-1
@@ -135,10 +138,12 @@ std::unique_ptr <InertialSensor> get_inertial_sensor() {
  * \param[in] tabaccel tab of floats with the values of the acceleromter in the 3 directions
  * \param[in] tabgyr tab of floats with the values of the gyrometer in the 3 directions
  * \param[in] tabmag tab of floats with the values of the magnetometer in the 3 directions
+ * \param[in] address this parameter is meant to hold the server's ipv4 address
  */
 
-void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
+void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag, char *address){
     /*Create socket*/
+    printf("Server's address: %s\n",address);
     int socket = create();
     int fileT = create_i2c(0x18);
     // We create a dynamic vector to save our position data.
@@ -169,15 +174,15 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
             sensor->read_magnetometer(tabmag,tabmag+1,tabmag+2);
 
             /*Send IMU info via socket*/
-            send_float(socket, *(tabaccel),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabaccel+1),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabaccel+2),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabgyr),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabgyr+1),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabgyr+2),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabmag),'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabmag+1), 'I', 8080, "192.168.0.1");
-            send_float(socket, *(tabmag+2),'I', 8080, "192.168.0.1");
+            send_float(socket, *(tabaccel),'I', PORT, address);
+            send_float(socket, *(tabaccel+1),'I', PORT, address);
+            send_float(socket, *(tabaccel+2),'I', PORT, address);
+            send_float(socket, *(tabgyr),'I', PORT, address);
+            send_float(socket, *(tabgyr+1),'I', PORT, address);
+            send_float(socket, *(tabgyr+2),'I', PORT, address);
+            send_float(socket, *(tabmag),'I', PORT, address);
+            send_float(socket, *(tabmag+1), 'I', PORT, address);
+            send_float(socket, *(tabmag+2),'I', PORT, address);
 
             // Here we use decodeSingleMessage(message_t msg, std::vector<double>& position_data). This is the 
             // function that will trigger the SPI communication incomming from the GPS module. The first argument
@@ -189,13 +194,13 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
             if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data) == 1){
                 //printf("message captured\n");
                 /*Send GPS info via socket*/
-                send_float(socket, (float)pos_data[0], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[1], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[2], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[3], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[4], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[5], 'G', 8080, "192.168.0.1");
-                send_float(socket, (float)pos_data[6], 'G', 8080, "192.168.0.1");
+                send_float(socket, (float)pos_data[0], 'G', PORT, address);
+                send_float(socket, (float)pos_data[1], 'G', PORT, address);
+                send_float(socket, (float)pos_data[2], 'G', PORT, address);
+                send_float(socket, (float)pos_data[3], 'G', PORT, address);
+                send_float(socket, (float)pos_data[4], 'G', PORT, address);
+                send_float(socket, (float)pos_data[5], 'G', PORT, address);
+                send_float(socket, (float)pos_data[6], 'G', PORT, address);
                 /*The data decoded*/
                 // GPS Millisecond Time of Week: (pos_data[0]/1000) s
                 // Longitude: pos_data[1]/10000000
@@ -208,7 +213,7 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag){
             // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
             // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
             // amount of time. 
-            send_float(socket, returntemp(fileT), 'T', 8080, "192.168.0.1");
+            send_float(socket, returntemp(fileT), 'T', PORT, address);
             usleep(500);
             //printf("%f", *tabaccel);
         }
@@ -236,5 +241,5 @@ int main(int argc, char *argv[]) {
     float tableauaccel[3];
     float tableaumag[3];
     float tableaugyr[3];
-    read_fromsens(tableauaccel, tableaumag, tableaugyr);
+    read_fromsens(tableauaccel, tableaumag, tableaugyr, argv[1]);
 }
