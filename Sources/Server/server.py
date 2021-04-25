@@ -1,10 +1,12 @@
 #import the socket module
 import socket
+import sys
 
 #create the server socket
-server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+server_socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-Host = '192.168.0.1' # local IP address 
+Host = sys.argv[1] # local IP address 
+print(Host)
 Port = 8080          # port
  
 #binding the socket with the server address
@@ -13,9 +15,9 @@ print("Server listening")
 
 #listen to incoming datagrams
 while(True):
-    addr = server_socket.recvfrom(1024, MSG_WAITALL)
-    message = addr[0]
-    address = addr[1]
+    data, addr = server_socket.recvfrom(1024)
+    message = data
+    address = addr
     clientMsg = "Client msg : {}".format(message)
     clientAddr = "Client addr : {}".format(address)
     print(clientMsg)
@@ -23,5 +25,4 @@ while(True):
 
     #send response
     msg = str.encode("Hello Client!")
-    s.sendto(msg, address)
-
+    server_socket.sendto(msg, address)
