@@ -1,4 +1,4 @@
-#import the socket module
+# Import modules
 import socket
 import sys
 
@@ -40,7 +40,6 @@ while(True):
             IMU = []
             indexIMU = 0
             IMUFlag = 1
-        #print("IMU: ",IMU[indexIMU])
     elif index == 'G' and GPSFlag == 0:
         GPS.append(float(num[1:-1]))
         indexGPS = indexGPS+1
@@ -49,10 +48,8 @@ while(True):
             GPS = []
             indexGPS = 0
             GPSFlag = 1
-        #print("GPS: ",GPS[indexGPS])
     elif index == 'T':
         Temp = float(num[1:-1])
-        #print("Temp: ",Temp)
     
 
     # Record received data

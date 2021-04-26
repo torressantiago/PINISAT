@@ -1,7 +1,7 @@
 /** @file gps.h
  * 
  * @brief Socket library for easy unicity between codes.
- * As per our needs, only a UDP socket client will be developed. 
+ * As per our needs, only a TCP socket client will be developed. 
  *
  * @author Santiago Torres Borda       
  * 
@@ -12,7 +12,6 @@
 #define SOCKETS_H
 
 #define SERVER_IPADDR "192.168.0.10"
-#define PORT 7000
 #define MAXLINE 1024 // 10 bit buffer
 
 

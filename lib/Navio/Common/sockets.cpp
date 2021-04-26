@@ -44,6 +44,9 @@ void send_float(int sock, float msg, char Data, int port, char* addr){
     servaddr.sin_addr.s_addr = inet_addr(addr);
     unsigned int n, len;
 
+    // Connect to server
+    //connect(sock, (struct sockaddr*)&servaddr, sizeof(servaddr));
+
     sendto(sock, (const char *)message, strlen(message),MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
     //printf("Hello message sent.\n");
 }
