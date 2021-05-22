@@ -31,10 +31,10 @@ int create(){
     return sockfd;
 }
 
-void send_float(int sock, float msg, char Data, int port, char* addr){
+void send_float(int sock, float msg, char Data, char tagNumber, int port, char* addr){
     char buffer[MAXLINE];
     char message[MAXLINE];
-    sprintf(&message[0],"%c%f",Data,msg);
+    sprintf(&message[0],"%c%c%f",tagNumber,Data,msg);
     struct sockaddr_in       servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
 

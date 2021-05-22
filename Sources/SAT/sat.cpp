@@ -174,15 +174,15 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag, char *address)
             sensor->read_magnetometer(tabmag,tabmag+1,tabmag+2);
 
             /*Send IMU info via socket*/
-            send_float(socket, *(tabaccel),'I', PORT, address);
-            send_float(socket, *(tabaccel+1),'I', PORT, address);
-            send_float(socket, *(tabaccel+2),'I', PORT, address);
-            send_float(socket, *(tabgyr),'I', PORT, address);
-            send_float(socket, *(tabgyr+1),'I', PORT, address);
-            send_float(socket, *(tabgyr+2),'I', PORT, address);
-            send_float(socket, *(tabmag),'I', PORT, address);
-            send_float(socket, *(tabmag+1), 'I', PORT, address);
-            send_float(socket, *(tabmag+2),'I', PORT, address);
+            send_float(socket, *(tabaccel),'I','1', PORT, address);
+            send_float(socket, *(tabaccel+1),'I','2', PORT, address);
+            send_float(socket, *(tabaccel+2),'I','3', PORT, address);
+            send_float(socket, *(tabgyr),'I','4', PORT, address);
+            send_float(socket, *(tabgyr+1),'I','5', PORT, address);
+            send_float(socket, *(tabgyr+2),'I','6', PORT, address);
+            send_float(socket, *(tabmag),'I','7', PORT, address);
+            send_float(socket, *(tabmag+1), 'I','8', PORT, address);
+            send_float(socket, *(tabmag+2),'I','9', PORT, address);
 
             // Here we use decodeSingleMessage(message_t msg, std::vector<double>& position_data). This is the 
             // function that will trigger the SPI communication incomming from the GPS module. The first argument
@@ -194,13 +194,13 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag, char *address)
             if(gps.decodeSingleMessage(Ublox::NAV_POSLLH, pos_data) == 1){
                 //printf("message captured\n");
                 /*Send GPS info via socket*/
-                send_float(socket, (float)pos_data[0], 'G', PORT, address);
-                send_float(socket, (float)pos_data[1], 'G', PORT, address);
-                send_float(socket, (float)pos_data[2], 'G', PORT, address);
-                send_float(socket, (float)pos_data[3], 'G', PORT, address);
-                send_float(socket, (float)pos_data[4], 'G', PORT, address);
-                send_float(socket, (float)pos_data[5], 'G', PORT, address);
-                send_float(socket, (float)pos_data[6], 'G', PORT, address);
+                send_float(socket, (float)pos_data[0], 'G','1', PORT, address);
+                send_float(socket, (float)pos_data[1], 'G','2', PORT, address);
+                send_float(socket, (float)pos_data[2], 'G','3', PORT, address);
+                send_float(socket, (float)pos_data[3], 'G','4', PORT, address);
+                send_float(socket, (float)pos_data[4], 'G','5', PORT, address);
+                send_float(socket, (float)pos_data[5], 'G','6', PORT, address);
+                send_float(socket, (float)pos_data[6], 'G','7', PORT, address);
                 /*The data decoded*/
                 // GPS Millisecond Time of Week: (pos_data[0]/1000) s
                 // Longitude: pos_data[1]/10000000
@@ -213,7 +213,7 @@ void read_fromsens(float *tabaccel, float *tabgyr, float *tabmag, char *address)
             // We can also decode a status message called NAV_STATUS which can tell us if there's some problem on board our satellite.
             // We can use the onboard RTC with the system command usleep(int utime) wich allows us to capture data in between a specific
             // amount of time. 
-            send_float(socket, returntemp(fileT), 'T', PORT, address);
+            send_float(socket, returntemp(fileT), 'T','1', PORT, address);
             usleep(500);
             //printf("%f", *tabaccel);
         }
