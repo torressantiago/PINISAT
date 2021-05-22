@@ -8,10 +8,13 @@ indexIMU = 0
 indexGPS = 0
 IMUFlag = 0
 GPSFlag = 0
-IMU = []
-IMU_rec = []
-GPS = []
-GPS_rec = []
+IMU = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]
+#IMU.append()
+#print(IMU)
+IMU_rec = IMU
+GPS = [1.0,1.0,1.0,1.0,1.0,1.0,1.0]
+#GPS.append([1.0,1.0,1.0,1.0,1.0,1.0,1.0])
+GPS_rec = GPS
 tb = 'acc'
 
 # specify database configurations
@@ -43,7 +46,10 @@ print(Host)
 Port = 8080          # port
  
 #binding the socket with the server address
-server_socket.bind((Host,Port))
+try:
+    server_socket.bind((Host,Port))
+except:
+    print("no need to rebind")
 print("Server listening")
 
 #listen to incoming datagrams and decode received data
@@ -51,33 +57,39 @@ while(True):
     #print("Entered while...")
     data, addr = server_socket.recvfrom(1024)
     message = data.decode("utf-8")
+    #print(message)
     num = message;
-    index = num[0]
+    index = num[1]
+    numtag = int(num[0])
     if index == 'I' and IMUFlag == 0:
         #print("Entered IMU...")
-        IMU.append(float(num[1:-1]))
-        indexIMU = indexIMU+1
-        if indexIMU == 9:
+        #IMU.append(float(num[1:-1]))
+        #indexIMU = indexIMU+1
+        #print(numtag)
+        IMU[numtag-1] = float(num[2:-1])
+        if numtag == 9:
             IMU_rec = IMU
-            IMU = []
+            IMU = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]
             indexIMU = 0
             IMUFlag = 1
             #print("IMU ready")
     elif index == 'G' and GPSFlag == 0:
         #print("Entered IMU...")
-        GPS.append(float(num[1:-1]))
-        indexGPS = indexGPS+1
-        if indexGPS == 7:
+        #GPS.append(float(num[1:-1]))
+        #indexGPS = indexGPS+1
+        GPS[numtag-1] = float(num[2:-1])
+        if numtag == 7:
             GPS_rec = GPS
-            GPS = []
+            GPS = [1.0,1.0,1.0,1.0,1.0,1.0,1.0]
             indexGPS = 0
             GPSFlag = 1
             #print("GPS ready")
     elif index == 'T':
         #print("Entered temp...")
-        Temp = str(float(num[1:-1]))
+        Temp = str(float(num[2:-1]))
         tb = 'temp'
         #print("Temp ready")
+        print(Temp)
         strCommand = "INSERT INTO "+tb+" VALUES ("+Temp+");"
         engine.execute(strCommand)
     
