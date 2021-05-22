@@ -89,7 +89,7 @@ while(True):
         Temp = str(float(num[2:-1]))
         tb = 'temp'
         #print("Temp ready")
-        print(Temp)
+        #print(Temp)
         strCommand = "INSERT INTO "+tb+" VALUES ("+Temp+");"
         engine.execute(strCommand)
     
